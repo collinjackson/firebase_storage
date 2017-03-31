@@ -1,0 +1,9 @@
+name: firebase_storage
+description: A new flutter plugin project.
+
+flutter:
+  plugin:
+
+dependencies:
+  flutter:
+    sdk: flutter
