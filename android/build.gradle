@@ -1,4 +1,4 @@
-group 'com.yourcompany.firebase_storage'
+group 'io.flutter.plugins.firebase.storage'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -28,5 +28,9 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+    dependencies {
+        compile 'com.google.firebase:firebase-auth:9.0.0'
+        compile 'com.google.firebase:firebase-storage:9.0.0'
     }
 }

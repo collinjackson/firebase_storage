@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(new MyApp());
@@ -46,29 +50,22 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
+const String kTestString = "Hello world!";
+
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _platformVersion = 'Unknown';
+  String _fileContents;
 
-  @override
-  void initState() {
-    super.initState();
-    FirebaseStorage.platformVersion.then((String platformVersion) {
-      setState(() {
-        _platformVersion = platformVersion;
-      });
-    });
-  }
-
-  void _incrementCounter() {
+  Future<Null> _uploadFile() async {
+    Directory systemTempDir = Directory.systemTemp;
+    File file = await new File('${systemTempDir.path}/foo.txt').create();
+    file.writeAsString(kTestString);
+    assert(file.readAsString() == kTestString);
+    StorageReference ref = FirebaseStorage.instance.ref().child("foo.txt");
+    StorageUploadTask uploadTask = ref.put(file);
+    Uri downloadUrl = (await uploadTask.future).downloadUrl;
+    http.Response downloadData = await http.get(downloadUrl);
     setState(() {
-      // This call to setState tells the Flutter framework that
-      // something has changed in this State, which causes it to rerun
-      // the build method below so that the display can reflect the
-      // updated values. If we changed _counter without calling
-      // setState(), then the build method would not be called again,
-      // and so nothing would appear to happen.
-      _counter++;
+      _fileContents = downloadData.body;
     });
   }
 
@@ -91,17 +88,17 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            new Text('Running on: $_platformVersion\n'),
-            new Text(
-                'Button tapped $_counter time${ _counter == 1 ? '' : 's' }.'),
+            _fileContents == null ?
+            new Text('Press the button to upload a file') :
+            new Text('Success!\n\nFile contents: "${_fileContents}"')
           ],
         ),
       ),
       floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        onPressed: _uploadFile,
+        tooltip: 'Upload',
+        child: new Icon(Icons.file_upload),
+      ),
     );
   }
 }
