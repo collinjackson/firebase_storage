@@ -2,12 +2,15 @@ package com.yourcompany.firebase_storage_example;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
-import com.yourcompany.firebase_storage.FirebaseStoragePlugin;
+import io.flutter.plugins.PluginRegistry;
 
 public class MainActivity extends FlutterActivity {
+    PluginRegistry pluginRegistry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseStoragePlugin.register(this);
+        pluginRegistry = new PluginRegistry();
+        pluginRegistry.registerAll(this);
     }
 }
