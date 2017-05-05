@@ -1,15 +1,16 @@
 #include "AppDelegate.h"
-#include "FirebaseStoragePlugin.h"
+#include "PluginRegistry.h"
 
 @implementation AppDelegate {
-  FirebaseStoragePlugin *_firebase_storage;
+  PluginRegistry *plugins;
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   FlutterViewController *flutterController =
       (FlutterViewController *)self.window.rootViewController;
-  _firebase_storage = [[FirebaseStoragePlugin alloc] initWithFlutterView:flutterController];
-    return YES;
+  plugins = [[PluginRegistry alloc] initWithController:flutterController];
+  return YES;
 }
 
 @end

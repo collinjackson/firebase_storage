@@ -4,8 +4,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 class FirebaseStorage {
-  static const PlatformMethodChannel _channel =
-      const PlatformMethodChannel('firebase_storage');
+  static const MethodChannel _channel = const MethodChannel('firebase_storage');
 
   static FirebaseStorage get instance => new FirebaseStorage();
 
