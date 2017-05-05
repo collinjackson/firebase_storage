@@ -1,5 +1,5 @@
 #import <Flutter/Flutter.h>
 
 @interface FirebaseStoragePlugin : NSObject
-- initWithController:(FlutterViewController *)flutterView;
+- initWithController:(FlutterViewController *)controller;
 @end

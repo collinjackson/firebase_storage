@@ -31,8 +31,8 @@ import java.io.File;
 public class FirebaseStoragePlugin implements MethodCallHandler {
   private FlutterActivity activity;
 
-  public static void register(FlutterActivity activity) {
-    new FirebaseStoragePlugin(activity);
+  public static FirebaseStoragePlugin register(FlutterActivity activity) {
+    return new FirebaseStoragePlugin(activity);
   }
 
   private FirebaseStoragePlugin(FlutterActivity activity) {
