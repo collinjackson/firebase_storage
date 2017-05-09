@@ -40,7 +40,10 @@ class StorageUploadTask {
   Future<Null> _start() async {
     String downloadUrl = await FirebaseStorage._channel.invokeMethod(
         "StorageReference#putFile",
-        <dynamic>[file.absolute.path, path],
+        <String, String>{
+          'filename': file.absolute.path,
+          'path': path,
+        },
     );
     _completer.complete(new UploadTaskSnapshot(downloadUrl: Uri.parse(downloadUrl)));
   }

@@ -22,7 +22,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.MethodCall;
 
-import java.util.List;
+import java.util.Map;
 import java.io.File;
 
 /**
@@ -30,6 +30,7 @@ import java.io.File;
  */
 public class FirebaseStoragePlugin implements MethodCallHandler {
   private FlutterActivity activity;
+  private FirebaseStorage firebaseStorage;
 
   public static FirebaseStoragePlugin register(FlutterActivity activity) {
     return new FirebaseStoragePlugin(activity);
@@ -37,17 +38,19 @@ public class FirebaseStoragePlugin implements MethodCallHandler {
 
   private FirebaseStoragePlugin(FlutterActivity activity) {
     this.activity = activity;
+    FirebaseApp.initializeApp(activity);
+    this.firebaseStorage = FirebaseStorage.getInstance();
     new MethodChannel(activity.getFlutterView(), "firebase_storage").setMethodCallHandler(this);
   }
 
   @Override
   public void onMethodCall(MethodCall call, final Result result) {
     if (call.method.equals("StorageReference#putFile")) {
-      List arguments = (List) call.arguments;
-      String filename = (String) arguments.get(0);
-      String path = (String) arguments.get(1);
+      Map<String, String> arguments = (Map<String, String>) call.arguments;
+      String filename = arguments.get("filename");
+      String path = arguments.get("path");
       File file = new File(filename);
-      StorageReference ref = FirebaseStorage.getInstance().getReference().child(path);
+      StorageReference ref = firebaseStorage.getReference().child(path);
       UploadTask uploadTask = ref.putFile(Uri.fromFile(file));
       uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
         @Override
