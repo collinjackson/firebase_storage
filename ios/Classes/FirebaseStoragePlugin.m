@@ -26,12 +26,13 @@
     }
     FlutterMethodChannel *channel =
         [FlutterMethodChannel methodChannelWithName:@"firebase_storage"
-                             binaryMessenger:controller];
+                                    binaryMessenger:controller];
     [channel
         setMethodCallHandler:^(FlutterMethodCall *call, FlutterResult result) {
           if ([@"StorageReference#putFile" isEqualToString:call.method]) {
-            NSData *data = [NSData dataWithContentsOfFile:call.arguments[0]];
-            NSString *path = call.arguments[1];
+            NSData *data =
+                [NSData dataWithContentsOfFile:call.arguments["filename"]];
+            NSString *path = call.arguments["path"];
             FIRStorageReference *fileRef =
                 [[FIRStorage storage].reference child:path];
             FIRStorageUploadTask *uploadTask = [fileRef
